@@ -1,34 +1,32 @@
 # mermaid-to-png
 
-Export Mermaid diagrams to PNG directly from VS Code using the `mmdc` (Mermaid CLI) engine.
+Export Mermaid diagrams to PNG in VS Code with one click, powered by `mmdc` (Mermaid CLI).
 
 ## Features
 
-- Export `.mmd` files to PNG via Explorer or Editor context menu
-- Export selected Mermaid code from any editor to PNG
-- Export all Mermaid code blocks in a Markdown file to individual PNGs
-- Configurable theme, background color, image scale, and output directory
-- Strips markdown code fences automatically when exporting selections
+- Export `.mmd` files to PNG from the context menu
+- Export selected Mermaid text from any editor to PNG
+- Batch export all ` ```mermaid ` code blocks in a Markdown file
+- Configure theme, background color, scale, and output directory
+- Automatically strip Markdown code fences when exporting selections
 
 ## Requirements
 
 [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) must be installed and accessible.
 
-**Recommended: install globally**
+Recommended global install:
 
 ```sh
 npm install -g @mermaid-js/mermaid-cli
 ```
 
-Keep the default setting `mermaid-to-png.mmdcPath = "mmdc"`.
+The default setting is `mermaid-to-png.mmdcPath = "mmdc"`.
 
-**Alternative: use a custom path**
+You can also set a custom command or path, for example: `npx mmdc` or `/usr/local/bin/mmdc`.
 
-Set `mermaid-to-png.mmdcPath` to any command string, for example `npx mmdc` or `/usr/local/bin/mmdc`.
+## Install the Extension
 
-## Installation
-
-Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/) or side-load the `.vsix` package:
+Install from the VS Code Marketplace, or side-load a `.vsix` package:
 
 ```sh
 code --install-extension mermaid-to-png-*.vsix --force
@@ -36,20 +34,45 @@ code --install-extension mermaid-to-png-*.vsix --force
 
 ## Usage
 
-### Export a `.mmd` file
+### 1. Export a `.mmd` file
 
-Right-click a `.mmd` file in the Explorer or Editor and choose **Mermaid: Export Mermaid Diagrams to PNG**. The PNG is saved beside the source file by default.
+Right-click a `.mmd` file in the Explorer or editor, then select:
 
-### Export selected Mermaid code
+**Mermaid: Export Mermaid Diagrams to PNG**
 
-1. Select Mermaid diagram text in any editor
+By default, the PNG is generated in the same directory as the source file.
+
+### 2. Export selected Mermaid text
+
+1. Select Mermaid text in any editor
 2. Right-click and choose **Mermaid: Export Mermaid Diagrams to PNG**
 
-Code fences (` ```mermaid ... ``` `) are stripped automatically.
+If the selection includes fenced code blocks like ` ```mermaid ... ``` `, fences are removed automatically before rendering.
 
-### Export a Markdown file
+### 3. Export a Markdown file
 
-Right-click a `.md` file in the Explorer and choose **Mermaid: Export Mermaid Diagrams to PNG**. Each ` ```mermaid ` code block is exported to its own PNG file.
+Right-click a `.md` file in the Explorer or editor, then select:
+
+**Mermaid: Export Mermaid Diagrams to PNG**
+
+Each Mermaid code block in the file is exported as an individual PNG.
+
+## Output Naming and Directory Rules
+
+### `.mmd` export
+
+- `diagram.mmd` -> `diagram.png`
+
+### Selection export
+
+- If the source is a saved file: use the source file name as the base output name
+- If the target name already exists: append `_1`, `_2`, ...
+- If the source is untitled/virtual: fall back to `diagram.png`
+
+### Output directory
+
+- If `mermaid-to-png.outputDir` is empty: output next to the source file
+- If `outputDir` is relative: resolve it from the source file's directory
 
 ## Configuration
 
@@ -57,37 +80,58 @@ Open VS Code Settings and search for `mermaid-to-png`.
 
 | Setting | Type | Default | Description |
 |---|---|---|---|
-| `mermaid-to-png.mmdcPath` | `string` | `mmdc` | Path or command for the mmdc executable |
-| `mermaid-to-png.outputDir` | `string` | `""` | Output directory. Empty = beside source file |
-| `mermaid-to-png.theme` | `string` | `default` | Theme: `default`, `dark`, `forest`, `neutral` |
-| `mermaid-to-png.background` | `string` | `white` | Background color (e.g. `white`, `transparent`, `#ffffff`) |
-| `mermaid-to-png.scale` | `number` | `2` | Image scale multiplier (1–8). Higher = sharper but larger |
+| `mermaid-to-png.mmdcPath` | `string` | `mmdc` | Executable command or path for `mmdc` |
+| `mermaid-to-png.outputDir` | `string` | `""` | Output directory; empty means same directory as source |
+| `mermaid-to-png.theme` | `string` | `default` | Mermaid theme: `default`, `dark`, `forest`, `neutral` |
+| `mermaid-to-png.background` | `string` | `white` | PNG background color, e.g. `white`, `transparent`, `#ffffff` |
+| `mermaid-to-png.scale` | `number` | `2` | Scale multiplier (1-8); higher is sharper but larger |
 
 ### Image clarity guide
 
-| Use case | Recommended scale |
+| Use case | Recommended `scale` |
 |---|---|
-| UI docs / screenshots | `2` |
+| Docs / screenshots | `2` |
 | Presentation slides | `3` |
 | Print assets | `4` |
 
+## Commands
+
+- `mermaid-to-png.exportSelection`
+  - Title: `Mermaid: Export Mermaid Diagrams to PNG`
+  - Context: editor context menu (when text is selected)
+
+- `mermaid-to-png.exportFile`
+  - Title: `Mermaid: Export Mermaid Diagrams to PNG`
+  - Context: `.mmd` files (editor/explorer)
+
+- `mermaid-to-png.exportMarkdown`
+  - Title: `Mermaid: Export Mermaid Diagrams to PNG`
+  - Context: `.md` files (editor/explorer)
+
 ## Troubleshooting
 
-**"Cannot find mmdc executable"**
+### "Cannot find `mmdc`"
 
-Ensure `@mermaid-js/mermaid-cli` is installed globally and `mermaid-to-png.mmdcPath` points to the correct command.
+1. Install Mermaid CLI:
 
-**Export fails with Mermaid syntax errors**
+```sh
+npm install -g @mermaid-js/mermaid-cli
+```
 
-Validate the source syntax by rendering via CLI directly:
+2. Verify that `mermaid-to-png.mmdcPath` is set correctly.
+
+### Export fails due to Mermaid syntax errors
+
+Validate the same input via CLI first:
 
 ```sh
 mmdc -i input.mmd -o output.png
 ```
 
-**PNG not generated where expected**
+### PNG output path is not as expected
 
-If `mermaid-to-png.outputDir` is a relative path, it resolves from the source file's directory.
+- Check `mermaid-to-png.outputDir`
+- Relative paths are resolved from the source file's directory
 
 ## Development
 
@@ -95,85 +139,17 @@ If `mermaid-to-png.outputDir` is a relative path, it resolves from the source fi
 # Install dependencies
 pnpm install
 
-# Compile TypeScript
+# Compile
 pnpm run compile
 
-# Run in Extension Development Host (F5)
+# Watch
 pnpm run watch
 
 # Package .vsix
 pnpm run package
 ```
 
-## License
-
-MIT
-
-
-### Export file mode
-- `diagram.mmd` -> `diagram.png`
-
-### Export selection mode
-- If source doc is file-backed: use source file base name
-- If target name already exists: append suffix `_1`, `_2`, ...
-- For untitled/virtual docs: fallback to `diagram.png` in home directory (or configured output dir)
-
-## Commands
-
-- `mermaid-to-png.exportFile`
-  - Title: **Mermaid: Export Mermaid Diagrams to PNG**
-  - Context: `.mmd` file in explorer/editor context
-
-- `mermaid-to-png.exportSelection`
-  - Title: **Mermaid: Export Mermaid Diagrams to PNG**
-  - Context: any editor with non-empty selection
-
-## Troubleshooting
-
-### "Cannot find mmdc executable"
-- Install Mermaid CLI globally:
-
-```bash
-npm install -g @mermaid-js/mermaid-cli
-```
-
-- Or set correct `mermaid-to-png.mmdcPath`
-
-### Export fails with Mermaid syntax errors
-- Validate Mermaid source syntax first
-- Try rendering the same file via CLI to inspect full error:
-
-```bash
-mmdc -i input.mmd -o output.png
-```
-
-### PNG not generated where expected
-- Check `mermaid-to-png.outputDir`
-- If relative path is used, it resolves from source file directory
-
-## Development
-
-### Install dependencies
-
-```bash
-pnpm install
-```
-
-### Compile
-
-```bash
-pnpm run compile
-```
-
-### Run extension in development
-- Open this project in VS Code
-- Press `F5` to launch Extension Development Host
-
-### Package
-
-```bash
-pnpm run package
-```
+Press `F5` in VS Code to launch the Extension Development Host for debugging.
 
 ## License
 
