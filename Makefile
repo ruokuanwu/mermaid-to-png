@@ -14,7 +14,7 @@ clean:
 	rm -rf $(OUT_DIR)
 
 package: build
-	npx vsce package --no-yarn --allow-missing-repository
+	npx vsce package --no-yarn
 
 package-prepass: build
 	npx vsce package --no-yarn --passphrase
