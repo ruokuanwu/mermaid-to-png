@@ -11,12 +11,12 @@ This extension supports:
 ## Features
 
 ### 1) Export `.mmd` file to PNG
-- In Explorer: right-click a `.mmd` file and run **Mermaid: Export as PNG**
-- In editor: when current file is `.mmd` and no selection, right-click and run **Mermaid: Export as PNG**
+- In Explorer: right-click a `.mmd` file and run **Mermaid: Export Mermaid Diagrams to PNG**
+- In editor: when current file is `.mmd` and no selection, right-click and run **Mermaid: Export Mermaid Diagrams to PNG**
 
 ### 2) Export selected Mermaid code to PNG
 - Select Mermaid diagram text in editor
-- Right-click and run **Mermaid: Export as PNG**
+- Right-click and run **Mermaid: Export Mermaid Diagrams to PNG**
 - If selection is fenced markdown block like:
 
 ````markdown
@@ -109,11 +109,11 @@ A practical baseline:
 ## Commands
 
 - `mermaid-to-png.exportFile`
-  - Title: **Mermaid: Export as PNG**
+  - Title: **Mermaid: Export Mermaid Diagrams to PNG**
   - Context: `.mmd` file in explorer/editor context
 
 - `mermaid-to-png.exportSelection`
-  - Title: **Mermaid: Export as PNG**
+  - Title: **Mermaid: Export Mermaid Diagrams to PNG**
   - Context: any editor with non-empty selection
 
 ## Troubleshooting

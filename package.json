@@ -16,12 +16,17 @@
         "commands": [
             {
                 "command": "mermaid-to-png.exportSelection",
-                "title": "Export as PNG",
+                "title": "Export Mermaid Diagrams to PNG",
                 "category": "Mermaid"
             },
             {
                 "command": "mermaid-to-png.exportFile",
-                "title": "Export as PNG",
+                "title": "Export Mermaid Diagrams to PNG",
+                "category": "Mermaid"
+            },
+            {
+                "command": "mermaid-to-png.exportMarkdown",
+                "title": "Export Mermaid Diagrams to PNG",
                 "category": "Mermaid"
             }
         ],
@@ -36,12 +41,22 @@
                     "command": "mermaid-to-png.exportFile",
                     "when": "!editorHasSelection && resourceExtname == .mmd",
                     "group": "mermaid@1"
+                },
+                {
+                    "command": "mermaid-to-png.exportMarkdown",
+                    "when": "!editorHasSelection && resourceExtname == .md",
+                    "group": "mermaid@1"
                 }
             ],
             "explorer/context": [
                 {
                     "command": "mermaid-to-png.exportFile",
                     "when": "resourceExtname == .mmd",
+                    "group": "mermaid@1"
+                },
+                {
+                    "command": "mermaid-to-png.exportMarkdown",
+                    "when": "resourceExtname == .md",
                     "group": "mermaid@1"
                 }
             ]
