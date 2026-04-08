@@ -41,6 +41,7 @@ export async function exportSelection(): Promise<void> {
 
     const opts = getMmdcOptions();
 
+    let exportError: Error | undefined;
     await vscode.window.withProgress(
         {
             location: vscode.ProgressLocation.Notification,
@@ -54,12 +55,10 @@ export async function exportSelection(): Promise<void> {
                     '-o', outputPath,
                     '-t', opts.theme,
                     '-b', opts.background,
+                    '--scale', String(opts.scale),
                 ]);
-                await showSuccess(outputPath);
             } catch (err) {
-                vscode.window.showErrorMessage(
-                    `Mermaid export failed: ${(err as Error).message}`
-                );
+                exportError = err as Error;
             } finally {
                 // Always clean up the temp file
                 try {
@@ -70,6 +69,12 @@ export async function exportSelection(): Promise<void> {
             }
         }
     );
+
+    if (exportError) {
+        vscode.window.showErrorMessage(`Mermaid export failed: ${exportError.message}`);
+    } else {
+        await showSuccess(outputPath);
+    }
 }
 
 /**

@@ -75,6 +75,13 @@
                     "type": "string",
                     "default": "white",
                     "description": "Background color for the exported PNG (e.g. 'white', 'transparent', '#ff0000')."
+                },
+                "mermaid-to-png.scale": {
+                    "type": "number",
+                    "default": 2,
+                    "minimum": 1,
+                    "maximum": 8,
+                    "description": "Image scale multiplier passed to mmdc (--scale). Higher values produce sharper PNGs but larger files."
                 }
             }
         }

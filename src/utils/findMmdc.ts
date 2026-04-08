@@ -5,14 +5,21 @@ export interface MmdcOptions {
     mmdcPath: string;
     theme: string;
     background: string;
+    scale: number;
 }
 
 export function getMmdcOptions(): MmdcOptions {
     const cfg = vscode.workspace.getConfiguration('mermaid-to-png');
+    const configuredScale = cfg.get<number>('scale');
+    const scale = typeof configuredScale === 'number' && Number.isFinite(configuredScale)
+        ? Math.min(8, Math.max(1, configuredScale))
+        : 2;
+
     return {
         mmdcPath: cfg.get<string>('mmdcPath') || 'mmdc',
         theme: cfg.get<string>('theme') || 'default',
         background: cfg.get<string>('background') || 'white',
+        scale,
     };
 }
 

@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as fs from 'fs';
 import { getMmdcOptions, runMmdc } from '../utils/findMmdc';
 
 /**
@@ -36,6 +35,7 @@ export async function exportFile(uri?: vscode.Uri): Promise<void> {
 
     const opts = getMmdcOptions();
 
+    let exportError: Error | undefined;
     await vscode.window.withProgress(
         {
             location: vscode.ProgressLocation.Notification,
@@ -49,15 +49,19 @@ export async function exportFile(uri?: vscode.Uri): Promise<void> {
                     '-o', outputPath,
                     '-t', opts.theme,
                     '-b', opts.background,
+                    '--scale', String(opts.scale),
                 ]);
-                await showSuccess(outputPath);
             } catch (err) {
-                vscode.window.showErrorMessage(
-                    `Mermaid export failed: ${(err as Error).message}`
-                );
+                exportError = err as Error;
             }
         }
     );
+
+    if (exportError) {
+        vscode.window.showErrorMessage(`Mermaid export failed: ${exportError.message}`);
+    } else {
+        await showSuccess(outputPath);
+    }
 }
 
 function resolveOutputPath(sourcePath: string): string {
