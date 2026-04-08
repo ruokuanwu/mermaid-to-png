@@ -1,0 +1,94 @@
+{
+    "name": "mermaid-to-png",
+    "displayName": "Mermaid to PNG",
+    "description": "Export Mermaid diagrams to PNG via mmdc (mermaid-cli)",
+    "version": "0.1.0",
+    "publisher": "your-publisher-name",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "icon": "images/icon.png",
+    "activationEvents": [],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "mermaid-to-png.exportSelection",
+                "title": "Export as PNG",
+                "category": "Mermaid"
+            },
+            {
+                "command": "mermaid-to-png.exportFile",
+                "title": "Export as PNG",
+                "category": "Mermaid"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "mermaid-to-png.exportSelection",
+                    "when": "editorHasSelection",
+                    "group": "mermaid@1"
+                },
+                {
+                    "command": "mermaid-to-png.exportFile",
+                    "when": "!editorHasSelection && resourceExtname == .mmd",
+                    "group": "mermaid@1"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "mermaid-to-png.exportFile",
+                    "when": "resourceExtname == .mmd",
+                    "group": "mermaid@1"
+                }
+            ]
+        },
+        "configuration": {
+            "title": "Mermaid to PNG",
+            "properties": {
+                "mermaid-to-png.mmdcPath": {
+                    "type": "string",
+                    "default": "mmdc",
+                    "description": "Path to the mmdc (mermaid-cli) executable. Defaults to 'mmdc' (must be in PATH). Example: /usr/local/bin/mmdc or npx mmdc"
+                },
+                "mermaid-to-png.outputDir": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Output directory for exported PNGs. Leave empty to use the same directory as the source file."
+                },
+                "mermaid-to-png.theme": {
+                    "type": "string",
+                    "default": "default",
+                    "enum": [
+                        "default",
+                        "dark",
+                        "forest",
+                        "neutral"
+                    ],
+                    "description": "Mermaid diagram theme."
+                },
+                "mermaid-to-png.background": {
+                    "type": "string",
+                    "default": "white",
+                    "description": "Background color for the exported PNG (e.g. 'white', 'transparent', '#ff0000')."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "package": "vsce package",
+        "vscode:prepublish": "npm run compile"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.85.0",
+        "@types/node": "^20.0.0",
+        "typescript": "^5.3.0",
+        "@vscode/vsce": "^2.22.0"
+    }
+}
