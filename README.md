@@ -1,102 +1,114 @@
-# Mermaid to PNG
+# mermaid-to-png
 
-Export Mermaid diagrams to PNG in VS Code using `mmdc` (`@mermaid-js/mermaid-cli`).
-
-This extension supports:
-- Exporting an entire `.mmd` file to PNG
-- Exporting selected Mermaid code from any editor to PNG
-- Configurable rendering options (theme, background, output dir)
-- High-clarity export via configurable image scale
+Export Mermaid diagrams to PNG directly from VS Code using the `mmdc` (Mermaid CLI) engine.
 
 ## Features
 
-### 1) Export `.mmd` file to PNG
-- In Explorer: right-click a `.mmd` file and run **Mermaid: Export Mermaid Diagrams to PNG**
-- In editor: when current file is `.mmd` and no selection, right-click and run **Mermaid: Export Mermaid Diagrams to PNG**
-
-### 2) Export selected Mermaid code to PNG
-- Select Mermaid diagram text in editor
-- Right-click and run **Mermaid: Export Mermaid Diagrams to PNG**
-- If selection is fenced markdown block like:
-
-````markdown
-```mermaid
-graph TD
-  A --> B
-```
-````
-
-The fence is stripped automatically before export.
+- Export `.mmd` files to PNG via Explorer or Editor context menu
+- Export selected Mermaid code from any editor to PNG
+- Export all Mermaid code blocks in a Markdown file to individual PNGs
+- Configurable theme, background color, image scale, and output directory
+- Strips markdown code fences automatically when exporting selections
 
 ## Requirements
 
-You must have Mermaid CLI installed and accessible by the extension.
+[Mermaid CLI](https://github.com/mermaid-js/mermaid-cli) must be installed and accessible.
 
-### Option A: Global install (recommended)
+**Recommended: install globally**
 
-```bash
+```sh
 npm install -g @mermaid-js/mermaid-cli
 ```
 
-Then keep default setting:
-- `mermaid-to-png.mmdcPath = "mmdc"`
+Keep the default setting `mermaid-to-png.mmdcPath = "mmdc"`.
 
-### Option B: Custom command/path
+**Alternative: use a custom path**
 
-Set `mermaid-to-png.mmdcPath` to a command string, for example:
-- `npx mmdc`
-- `/usr/local/bin/mmdc`
+Set `mermaid-to-png.mmdcPath` to any command string, for example `npx mmdc` or `/usr/local/bin/mmdc`.
+
+## Installation
+
+Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/) or side-load the `.vsix` package:
+
+```sh
+code --install-extension mermaid-to-png-*.vsix --force
+```
+
+## Usage
+
+### Export a `.mmd` file
+
+Right-click a `.mmd` file in the Explorer or Editor and choose **Mermaid: Export Mermaid Diagrams to PNG**. The PNG is saved beside the source file by default.
+
+### Export selected Mermaid code
+
+1. Select Mermaid diagram text in any editor
+2. Right-click and choose **Mermaid: Export Mermaid Diagrams to PNG**
+
+Code fences (` ```mermaid ... ``` `) are stripped automatically.
+
+### Export a Markdown file
+
+Right-click a `.md` file in the Explorer and choose **Mermaid: Export Mermaid Diagrams to PNG**. Each ` ```mermaid ` code block is exported to its own PNG file.
 
 ## Configuration
 
 Open VS Code Settings and search for `mermaid-to-png`.
 
-### `mermaid-to-png.mmdcPath`
-- Type: `string`
-- Default: `mmdc`
-- Description: Path or command for Mermaid CLI executable.
+| Setting | Type | Default | Description |
+|---|---|---|---|
+| `mermaid-to-png.mmdcPath` | `string` | `mmdc` | Path or command for the mmdc executable |
+| `mermaid-to-png.outputDir` | `string` | `""` | Output directory. Empty = beside source file |
+| `mermaid-to-png.theme` | `string` | `default` | Theme: `default`, `dark`, `forest`, `neutral` |
+| `mermaid-to-png.background` | `string` | `white` | Background color (e.g. `white`, `transparent`, `#ffffff`) |
+| `mermaid-to-png.scale` | `number` | `2` | Image scale multiplier (1–8). Higher = sharper but larger |
 
-### `mermaid-to-png.outputDir`
-- Type: `string`
-- Default: empty (`""`)
-- Description: Output directory for PNG files.
-- Behavior:
-  - Empty: output beside source file
-  - Relative path: resolved relative to source file directory
-  - Absolute path: used directly
+### Image clarity guide
 
-### `mermaid-to-png.theme`
-- Type: `string`
-- Default: `default`
-- Allowed: `default`, `dark`, `forest`, `neutral`
+| Use case | Recommended scale |
+|---|---|
+| UI docs / screenshots | `2` |
+| Presentation slides | `3` |
+| Print assets | `4` |
 
-### `mermaid-to-png.background`
-- Type: `string`
-- Default: `white`
-- Examples: `white`, `transparent`, `#ffffff`
+## Troubleshooting
 
-### `mermaid-to-png.scale`
-- Type: `number`
-- Default: `2`
-- Range: `1` to `8`
-- Description: Passed to `mmdc --scale`.
-- Effect:
-  - Larger scale => sharper PNG (especially on HiDPI screens)
-  - Larger scale => bigger file size and slower render
+**"Cannot find mmdc executable"**
 
-## Image Clarity Tips
+Ensure `@mermaid-js/mermaid-cli` is installed globally and `mermaid-to-png.mmdcPath` points to the correct command.
 
-If exported PNG looks blurry:
-- Set `mermaid-to-png.scale` to `2` or `3` for most cases
-- Use `4` for print or zoom-heavy usage
-- Keep `background = transparent` if you need compositing onto other backgrounds
+**Export fails with Mermaid syntax errors**
 
-A practical baseline:
-- UI docs/screenshots: `scale=2`
-- Presentation slides: `scale=3`
-- Print assets: `scale=4`
+Validate the source syntax by rendering via CLI directly:
 
-## Output Naming Rules
+```sh
+mmdc -i input.mmd -o output.png
+```
+
+**PNG not generated where expected**
+
+If `mermaid-to-png.outputDir` is a relative path, it resolves from the source file's directory.
+
+## Development
+
+```sh
+# Install dependencies
+pnpm install
+
+# Compile TypeScript
+pnpm run compile
+
+# Run in Extension Development Host (F5)
+pnpm run watch
+
+# Package .vsix
+pnpm run package
+```
+
+## License
+
+MIT
+
 
 ### Export file mode
 - `diagram.mmd` -> `diagram.png`
