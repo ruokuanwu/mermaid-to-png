@@ -3,7 +3,7 @@
     "displayName": "Mermaid to PNG",
     "description": "Export Mermaid diagrams to PNG via mmdc (mermaid-cli)",
     "version": "0.1.0",
-    "publisher": "wuruokuan",
+    "publisher": "ruokuanwu",
     "repository": {
         "url": "https://github.com/ruokuanwu/mermaid-to-png"
     },
